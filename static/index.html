@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Du'a Generator — Last 10 Nights of Ramadan</title>
+  <meta name="description" content="Create a personalized du'a for your family to recite during the blessed last 10 nights of Ramadan." />
+  <meta property="og:title" content="Du'a for the Last Ten Nights of Ramadan" />
+  <meta property="og:description" content="Create a personalized supplication for your family." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    :root{--gold:#c9a96e;--gold-dim:rgba(201,169,110,0.3);--bg-deep:#0a1628;--bg-mid:#112240;--text-primary:#e8dcc8;--text-secondary:#d4c9b4;--text-muted:#8a7d6b;--text-dim:#5a5042;--error:#e8a0a0;--error-bg:rgba(200,100,100,0.1);--error-border:rgba(200,100,100,0.2);--success:#8bca8b;--success-bg:rgba(100,200,100,0.1);--card-bg:rgba(255,255,255,0.03);--card-border:rgba(201,169,110,0.12);--input-bg:rgba(255,255,255,0.04);--input-border:rgba(201,169,110,0.2);--input-focus-border:rgba(201,169,110,0.5);--input-focus-shadow:0 0 12px rgba(201,169,110,0.1);}
+    *{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+    body{font-family:'Cormorant Garamond',serif;background:linear-gradient(160deg,var(--bg-deep) 0%,var(--bg-mid) 40%,#0d1f3c 70%,#091525 100%);color:var(--text-primary);min-height:100vh;overflow-x:hidden;}
+    ::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(201,169,110,0.2);border-radius:3px;}
+    ::placeholder{color:var(--gold-dim)!important;}
+    @keyframes fadeInUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+    @keyframes pulse{0%,100%{opacity:.5;}50%{opacity:1;}}
+    @keyframes gentleSpin{from{transform:rotate(0);}to{transform:rotate(360deg);}}
+    @keyframes slideDown{from{opacity:0;max-height:0;}to{opacity:1;max-height:300px;}}
+    .fade-in{animation:fadeInUp .7s ease-out both;}
+    .bg-pattern{position:fixed;inset:0;z-index:0;pointer-events:none;}.bg-pattern svg{position:absolute;inset:0;opacity:.04;}
+    .bg-orb{position:absolute;border-radius:50%;filter:blur(40px);}.bg-orb-1{top:10%;right:15%;width:400px;height:400px;background:radial-gradient(circle,rgba(201,169,110,.06) 0%,transparent 70%);}.bg-orb-2{bottom:20%;left:10%;width:300px;height:300px;background:radial-gradient(circle,rgba(201,169,110,.04) 0%,transparent 70%);filter:blur(30px);}
+    .container{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;padding:40px 20px 80px;min-height:100vh;}
+    .header{text-align:center;margin-bottom:48px;}.bismillah{font-family:'Amiri',serif;font-size:36px;color:var(--gold);direction:rtl;opacity:.8;margin-bottom:8px;}.title{font-size:clamp(32px,6vw,48px);font-weight:300;color:var(--text-primary);letter-spacing:.04em;margin-bottom:8px;line-height:1.2;}.subtitle{font-size:18px;color:var(--text-muted);font-style:italic;max-width:500px;margin:0 auto;line-height:1.6;}
+    .counter{text-align:center;margin-bottom:28px;font-size:14px;color:var(--text-muted);}.counter .count{color:var(--gold);font-weight:600;font-size:16px;}
+    .divider{display:flex;align-items:center;justify-content:center;gap:12px;margin:28px 0;opacity:.4;}.divider-line{width:60px;height:1px;}.divider-line-l{background:linear-gradient(to right,transparent,var(--gold));}.divider-line-r{background:linear-gradient(to left,transparent,var(--gold));}.divider-star{color:var(--gold);font-size:18px;opacity:.6;}
+    .form-wrap{width:100%;max-width:640px;}
+    label{display:block;margin-bottom:6px;font-size:13px;font-weight:600;color:var(--gold);letter-spacing:.05em;text-transform:uppercase;}label.main-label{font-size:15px;}
+    input,select,textarea{width:100%;padding:12px 16px;border-radius:10px;border:1px solid var(--input-border);background:var(--input-bg);color:var(--text-primary);font-size:15px;font-family:'Cormorant Garamond',serif;outline:none;transition:border-color .3s,box-shadow .3s;}
+    input:focus,select:focus,textarea:focus{border-color:var(--input-focus-border);box-shadow:var(--input-focus-shadow);}
+    input.name-input{font-size:18px;padding:14px 18px;}
+    select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23c9a96e' d='M6 8L0 0h12z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;}
+    select option{background:var(--bg-mid);color:var(--text-primary);}textarea{resize:vertical;min-height:60px;}
+    .about-you-card{background:var(--card-bg);border-radius:16px;border:1px solid var(--card-border);padding:28px;backdrop-filter:blur(10px);margin-bottom:32px;}.about-you-title{font-size:20px;font-weight:600;color:var(--gold);margin-bottom:20px;}
+    .member-card{background:var(--card-bg);border-radius:16px;border:1px solid var(--card-border);padding:24px;position:relative;backdrop-filter:blur(10px);transition:border-color .3s;margin-bottom:16px;}.member-card:hover{border-color:rgba(201,169,110,.25);}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}.field-group{margin-bottom:16px;}.field-group:last-child{margin-bottom:0;}
+    .remove-btn{position:absolute;top:12px;right:12px;background:rgba(255,255,255,.05);border:1px solid rgba(201,169,110,.15);border-radius:8px;color:var(--gold);width:30px;height:30px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s;font-family:sans-serif;line-height:1;}.remove-btn:hover{background:rgba(200,100,100,.15);border-color:rgba(200,100,100,.3);}
+    .add-btn{width:100%;padding:14px;margin-top:4px;border-radius:12px;border:1px dashed var(--gold-dim);background:transparent;color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;cursor:pointer;transition:all .3s;letter-spacing:.05em;}.add-btn:hover{background:rgba(201,169,110,.05);border-color:var(--input-focus-border);}
+    .empty-state{text-align:center;padding:40px 20px;border:1px dashed var(--gold-dim);border-radius:16px;margin-bottom:16px;}.empty-state p{font-size:16px;color:var(--text-muted);font-style:italic;margin-bottom:4px;}.empty-state .small{font-size:13px;color:var(--text-dim);}
+    .generate-btn{width:100%;padding:18px;margin-top:32px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold) 0%,#a8873f 50%,var(--gold) 100%);background-size:200% auto;color:var(--bg-deep);font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;transition:all .4s;box-shadow:0 4px 24px rgba(201,169,110,.2);}.generate-btn:hover{background-position:right center;}.generate-btn:disabled{background:linear-gradient(135deg,#2a1f0e,#3d2c12);color:var(--gold);cursor:wait;box-shadow:none;}
+    .loading-text{text-align:center;margin-top:16px;font-size:15px;color:var(--text-muted);font-style:italic;animation:pulse 2s ease-in-out infinite;}.spinner{display:inline-block;animation:gentleSpin 2s linear infinite;}
+    .error-msg{padding:12px 16px;border-radius:10px;margin-top:16px;background:var(--error-bg);border:1px solid var(--error-border);color:var(--error);font-size:15px;display:none;}
+    .success-msg{padding:12px 16px;border-radius:10px;margin-top:12px;background:var(--success-bg);border:1px solid rgba(100,200,100,.2);color:var(--success);font-size:15px;display:none;}
+    .section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}.section-title{font-size:24px;font-weight:600;color:var(--gold);}.member-count{font-size:14px;color:var(--text-muted);}
+    .result-wrap{width:100%;max-width:720px;margin-top:60px;}.result-card{background:var(--card-bg);border-radius:20px;border:1px solid rgba(201,169,110,.15);padding:40px 36px;backdrop-filter:blur(10px);box-shadow:0 8px 40px rgba(0,0,0,.2);}
+    .result-actions{display:flex;justify-content:flex-end;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
+    .action-btn{padding:8px 20px;border-radius:8px;border:1px solid rgba(201,169,110,.3);background:rgba(255,255,255,.03);color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .3s;letter-spacing:.05em;}.action-btn:hover{background:rgba(201,169,110,.08);border-color:var(--input-focus-border);}.action-btn.copied{background:var(--success-bg);color:var(--success);}.action-btn:disabled{opacity:.5;cursor:wait;}
+    .dua-content h1{font-size:32px;font-weight:700;color:var(--gold);margin-top:40px;margin-bottom:20px;line-height:1.3;text-align:center;}.dua-content h2{font-size:26px;font-weight:700;color:var(--gold);margin-top:36px;margin-bottom:16px;line-height:1.3;}.dua-content p{font-size:18px;line-height:1.8;color:var(--text-secondary);margin:6px 0;}.dua-content strong{color:var(--gold);}.dua-content em{color:#b8a88a;font-style:italic;}
+    .panel{background:var(--card-bg);border:1px solid var(--card-border);border-radius:14px;padding:20px 24px;margin-top:16px;animation:slideDown .3s ease-out;overflow:hidden;}.panel-title{font-size:16px;font-weight:600;color:var(--gold);margin-bottom:12px;text-transform:uppercase;letter-spacing:.05em;}.panel-row{display:flex;gap:10px;align-items:end;}.panel-row input{flex:1;}
+    .panel-btn{padding:12px 24px;border-radius:10px;border:none;cursor:pointer;background:var(--gold);color:var(--bg-deep);font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:700;letter-spacing:.04em;transition:all .3s;white-space:nowrap;}.panel-btn:hover{opacity:.9;}.panel-btn:disabled{opacity:.5;cursor:wait;}
+    .share-link-box{display:flex;align-items:center;gap:10px;margin-top:12px;padding:10px 14px;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid rgba(201,169,110,.15);}.share-link-box input{flex:1;border:none;background:transparent;color:var(--text-primary);font-size:14px;outline:none;padding:0;}.share-link-box button{padding:6px 16px;font-size:13px;}
+    .footer{margin-top:60px;text-align:center;font-size:13px;color:var(--text-dim);line-height:1.8;}.footer a{color:var(--gold);text-decoration:none;transition:opacity .2s;}.footer a:hover{opacity:.8;}
+    .closing-note{text-align:center;margin-top:32px;font-size:15px;color:var(--text-muted);font-style:italic;line-height:1.8;}.closing-arabic{color:var(--gold);font-family:'Amiri',serif;font-size:18px;}
+    @media(max-width:600px){.grid-2{grid-template-columns:1fr;}.result-card{padding:24px 18px;}.container{padding:24px 14px 60px;}.bismillah{font-size:28px;}.dua-content h1{font-size:26px;}.dua-content h2{font-size:22px;}.dua-content p{font-size:16px;}.result-actions{justify-content:center;}.panel-row{flex-direction:column;}.about-you-card{padding:20px;}}
+  </style>
+</head>
+<body>
+  <div class="bg-pattern"><svg width="100%" height="100%"><defs><pattern id="ip" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse"><circle cx="40" cy="40" r="35" fill="none" stroke="#c9a96e" stroke-width="0.5"/><circle cx="40" cy="40" r="25" fill="none" stroke="#c9a96e" stroke-width="0.5"/><circle cx="40" cy="40" r="15" fill="none" stroke="#c9a96e" stroke-width="0.3"/><line x1="40" y1="0" x2="40" y2="80" stroke="#c9a96e" stroke-width="0.3"/><line x1="0" y1="40" x2="80" y2="40" stroke="#c9a96e" stroke-width="0.3"/><line x1="0" y1="0" x2="80" y2="80" stroke="#c9a96e" stroke-width="0.2"/><line x1="80" y1="0" x2="0" y2="80" stroke="#c9a96e" stroke-width="0.2"/></pattern></defs><rect width="100%" height="100%" fill="url(#ip)"/></svg><div class="bg-orb bg-orb-1"></div><div class="bg-orb bg-orb-2"></div></div>
+  <div class="container">
+    <header class="header fade-in">
+      <div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+      <h1 class="title">Du'a for the Last Ten Nights</h1>
+      <p class="subtitle">Create a personalized supplication for you and your family<br/>to recite during the blessed nights of Ramadan</p>
+      <div class="divider"><div class="divider-line divider-line-l"></div><span class="divider-star">✦</span><div class="divider-line divider-line-r"></div></div>
+    </header>
+    <div class="counter fade-in" id="counterSection"><span class="count" id="duaCount">—</span> du'as generated and counting</div>
+
+    <div id="formSection" class="form-wrap fade-in">
+      <!-- ABOUT YOU -->
+      <div class="about-you-card">
+        <div class="about-you-title">About You</div>
+        <div class="grid-2">
+          <div><label for="userName">Your Name</label><input type="text" id="userName" class="name-input" placeholder="Enter your name" /></div>
+          <div><label for="userEmail">Your Email</label><input type="email" id="userEmail" placeholder="name@example.com" /></div>
+        </div>
+        <div class="grid-2">
+          <div><label for="userAge">Age Range</label><select id="userAge"><option value="">Select...</option></select></div>
+          <div><label for="userGender">Gender</label><select id="userGender"><option value="">Select...</option><option value="Male">Male</option><option value="Female">Female</option></select></div>
+        </div>
+        <div class="field-group" style="margin-top:16px"><label for="userConcerns">What would you like to pray for?</label><textarea id="userConcerns" rows="2" placeholder="e.g. Guidance, health, success in career, closeness to Allah..."></textarea></div>
+      </div>
+
+      <!-- FAMILY MEMBERS -->
+      <div>
+        <div class="section-header"><h2 class="section-title">Family Members</h2><span class="member-count" id="memberCount">0 people</span></div>
+        <div id="membersContainer"></div>
+        <button class="add-btn" onclick="addMember()">+ Add Family Member</button>
+      </div>
+
+      <div id="errorMsg" class="error-msg"></div>
+
+      <!-- DELIVERY MODE -->
+      <div style="margin-top:24px">
+        <label class="main-label">Delivery Mode</label>
+        <div style="display:flex;gap:12px;margin-top:8px">
+          <label style="flex:1;display:flex;align-items:center;gap:10px;padding:14px 16px;border-radius:12px;border:1px solid rgba(201,169,110,.2);background:rgba(201,169,110,.06);cursor:pointer;text-transform:none;font-size:15px;font-weight:400;letter-spacing:0;margin:0"><input type="radio" name="deliveryMode" value="instant" checked style="width:auto;padding:0;accent-color:var(--gold)"/><div><div style="font-weight:600;color:var(--gold);font-size:14px;text-transform:uppercase;letter-spacing:.05em">Instant</div><div style="font-size:13px;color:var(--text-muted)">English du'a, generated in real-time (~30-60 sec)</div></div></label>
+          <label style="flex:1;display:flex;align-items:center;gap:10px;padding:14px 16px;border-radius:12px;border:1px solid rgba(201,169,110,.2);background:rgba(255,255,255,.02);cursor:pointer;text-transform:none;font-size:15px;font-weight:400;letter-spacing:0;margin:0"><input type="radio" name="deliveryMode" value="email" style="width:auto;padding:0;accent-color:var(--gold)"/><div><div style="font-weight:600;color:var(--gold);font-size:14px;text-transform:uppercase;letter-spacing:.05em">Detailed + Arabic</div><div style="font-size:13px;color:var(--text-muted)">Includes Arabic script &amp; transliteration, emailed (~5 min)</div></div></label>
+        </div>
+      </div>
+
+      <button class="generate-btn" id="generateBtn" onclick="generateDua()">Generate My Du'a</button>
+      <p class="loading-text" id="loadingText" style="display:none">Weaving Quranic verses, Hadith, and the Names of Allah into your personal supplication...</p>
+    </div>
+
+    <!-- RESULTS -->
+    <div id="resultSection" class="result-wrap fade-in" style="display:none">
+      <div class="divider"><div class="divider-line divider-line-l"></div><span class="divider-star">✦</span><div class="divider-line divider-line-r"></div></div>
+      <div class="result-card">
+        <div class="result-actions">
+          <button class="action-btn" id="copyBtn" onclick="copyDua()">Copy</button>
+          <button class="action-btn" id="pdfBtn" onclick="exportPDF()">Download PDF</button>
+          <button class="action-btn" onclick="togglePanel('emailPanel')">Email</button>
+          <button class="action-btn" onclick="shareDua()">Share Link</button>
+          <button class="action-btn" onclick="printDua()">Print</button>
+          <button class="action-btn" onclick="startOver()">Start Over</button>
+        </div>
+        <div class="panel" id="emailPanel" style="display:none"><div class="panel-title">Email this Du'a</div><div class="panel-row"><div style="flex:1"><label for="emailInput">Recipient Email</label><input type="email" id="emailInput" placeholder="name@example.com" /></div><button class="panel-btn" id="emailSendBtn" onclick="sendEmail()">Send</button></div><div id="emailSuccess" class="success-msg"></div><div id="emailError" class="error-msg"></div></div>
+        <div class="panel" id="sharePanel" style="display:none"><div class="panel-title">Share this Du'a</div><p style="font-size:14px;color:var(--text-muted);margin-bottom:12px">Anyone with this link can view the du'a.</p><div class="share-link-box"><input type="text" id="shareLinkInput" readonly /><button class="action-btn" onclick="copyShareLink()">Copy</button></div><div id="shareSuccess" class="success-msg"></div></div>
+        <div class="dua-content" id="duaContent"></div>
+      </div>
+      <div class="closing-note">May Allah accept your du'a during these blessed nights.<br/><span class="closing-arabic">تَقَبَّلَ اللَّهُ مِنَّا وَمِنكُمْ</span></div>
+    </div>
+
+    <!-- ═══ SUPPORT US ═══ -->
+    <div id="supportSection" class="form-wrap fade-in" style="margin-top:48px">
+      <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:20px;padding:32px 28px;text-align:center;backdrop-filter:blur(10px);">
+        <div style="font-size:22px;font-weight:600;color:var(--gold);margin-bottom:8px">Support Us</div>
+        <p style="font-size:15px;color:var(--text-muted);line-height:1.6;max-width:440px;margin:0 auto 20px;font-style:italic">
+          This service is free for the ummah. Your support helps us keep it running and reach more families during Ramadan.
+        </p>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:16px" id="supportAmounts">
+          <button onclick="selectAmount('5')" class="support-amt" data-amt="5" style="padding:10px 22px;border-radius:10px;border:1px solid rgba(201,169,110,0.25);background:rgba(255,255,255,0.03);color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;cursor:pointer;transition:all 0.3s;">$5</button>
+          <button onclick="selectAmount('10')" class="support-amt selected" data-amt="10" style="padding:10px 22px;border-radius:10px;border:1px solid var(--gold);background:rgba(201,169,110,0.12);color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;cursor:pointer;transition:all 0.3s;">$10</button>
+          <button onclick="selectAmount('25')" class="support-amt" data-amt="25" style="padding:10px 22px;border-radius:10px;border:1px solid rgba(201,169,110,0.25);background:rgba(255,255,255,0.03);color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;cursor:pointer;transition:all 0.3s;">$25</button>
+          <button onclick="selectAmount('50')" class="support-amt" data-amt="50" style="padding:10px 22px;border-radius:10px;border:1px solid rgba(201,169,110,0.25);background:rgba(255,255,255,0.03);color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;cursor:pointer;transition:all 0.3s;">$50</button>
+          <button onclick="selectAmount('custom')" class="support-amt" data-amt="custom" style="padding:10px 22px;border-radius:10px;border:1px solid rgba(201,169,110,0.25);background:rgba(255,255,255,0.03);color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;cursor:pointer;transition:all 0.3s;">Other</button>
+        </div>
+        <div id="customAmountWrap" style="display:none;margin-bottom:16px;max-width:200px;margin-left:auto;margin-right:auto;">
+          <input type="number" id="customAmountInput" min="1" placeholder="Enter amount ($)" style="text-align:center;" />
+        </div>
+        <button id="supportBtn" onclick="handleSupport()" style="padding:14px 40px;border-radius:12px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold) 0%,#a8873f 100%);color:var(--bg-deep);font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;letter-spacing:0.06em;transition:all 0.3s;box-shadow:0 3px 16px rgba(201,169,110,0.2);">
+          Support — Jazak'Allah Khair
+        </button>
+        <p style="font-size:12px;color:var(--text-dim);margin-top:12px">Secure payment via Stripe. No account required.</p>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <span class="divider-star" style="opacity:.3">✦</span><br/>
+      This tool generates du'as using AI. Please verify all Quranic verses<br/>and Hadith references with authentic Islamic sources.<br/><br/>
+      Questions or feedback? <a href="mailto:support@mydua.ai">support@mydua.ai</a>
+    </div>
+  </div>
+
+  <script>
+    const API={generate:"/api/generate-dua",save:"/api/save-dua",email:"/api/email-dua",trackPdf:"/api/track-pdf",analytics:"/api/analytics",job:"/api/job/"};
+    const RELATIONSHIPS=["Wife","Husband","Son","Daughter","Mother","Father","Brother","Sister","Grandfather","Grandmother","Uncle","Aunt","Nephew","Niece","Cousin","Friend"];
+    const AGE_RANGES=["Under 5","5-10","11-15","16-20","21-30","31-40","41-50","51-60","61-70","70+"];
+    let members=[], generatedDuaText="", currentDuaId=null, currentEmailToken="", deliveryMode="instant";
+
+    // Populate user age dropdown
+    const uAge=document.getElementById("userAge");
+    AGE_RANGES.forEach(a=>{const o=document.createElement("option");o.value=a;o.textContent=a;uAge.appendChild(o);});
+    // Delivery mode toggle
+    document.querySelectorAll('input[name="deliveryMode"]').forEach(r=>{r.addEventListener("change",function(){deliveryMode=this.value;});});
+
+    function emptyMember(){return{name:"",relationship:"",ageRange:"",gender:"",attributes:"",concerns:""};}
+    function esc(s){const d=document.createElement("div");d.textContent=s;return d.innerHTML;}
+
+    async function loadCounter(){try{const r=await fetch(API.analytics);if(r.ok){const d=await r.json();document.getElementById("duaCount").textContent=(d.total_duas_generated||0).toLocaleString();}}catch(e){document.getElementById("counterSection").style.display="none";}}
+    loadCounter();
+
+    function renderMembers(){
+      const c=document.getElementById("membersContainer");c.innerHTML="";
+      if(!members.length){c.innerHTML='<div class="empty-state"><p>No family members added yet</p><p class="small">Add your loved ones to include them in your du\'a</p></div>';document.getElementById("memberCount").textContent="0 people";return;}
+      members.forEach((m,i)=>{const card=document.createElement("div");card.className="member-card fade-in";card.style.animationDelay=(i*.05)+"s";
+        card.innerHTML=`<button class="remove-btn" onclick="removeMember(${i})" title="Remove">&times;</button><div class="grid-2"><div><label>Name</label><input type="text" placeholder="e.g. Sumaira" value="${esc(m.name)}" oninput="members[${i}].name=this.value"/></div><div><label>Relationship</label><select onchange="members[${i}].relationship=this.value"><option value="">Select...</option>${RELATIONSHIPS.map(r=>`<option value="${r}"${m.relationship===r?" selected":""}>${r}</option>`).join("")}</select></div></div><div class="grid-2"><div><label>Age Range</label><select onchange="members[${i}].ageRange=this.value"><option value="">Select...</option>${AGE_RANGES.map(a=>`<option value="${a}"${m.ageRange===a?" selected":""}>${a}</option>`).join("")}</select></div><div><label>Gender</label><select onchange="members[${i}].gender=this.value"><option value="">Select...</option><option value="Male"${m.gender==="Male"?" selected":""}>Male</option><option value="Female"${m.gender==="Female"?" selected":""}>Female</option></select></div></div><div class="field-group"><label>Concerns / What to pray for</label><textarea rows="2" placeholder="e.g. Health, exams, guidance..." oninput="members[${i}].concerns=this.value">${esc(m.concerns)}</textarea></div>`;
+        c.appendChild(card);});
+      document.getElementById("memberCount").textContent=members.length+(members.length===1?" person":" people");
+    }
+    function addMember(){members.push(emptyMember());renderMembers();}
+    function removeMember(i){members.splice(i,1);renderMembers();}
+
+    async function generateDua(){
+      const userName=document.getElementById("userName").value.trim();
+      const userEmail=document.getElementById("userEmail").value.trim();
+      const btn=document.getElementById("generateBtn");const loadEl=document.getElementById("loadingText");
+      if(!userName){showError("Please enter your name.");return;}
+      if(deliveryMode==="email"&&(!userEmail||!userEmail.includes("@"))){showError("Please enter your email address for delivery.");return;}
+      const userInfo={name:userName,relationship:"Self",ageRange:document.getElementById("userAge").value,gender:document.getElementById("userGender").value,attributes:"",concerns:document.getElementById("userConcerns").value.trim()};
+      const allMembers=[userInfo,...members.filter(m=>m.name.trim())];
+      hideError();btn.disabled=true;
+      if(deliveryMode==="email"){btn.innerHTML='<span class="spinner">✦</span> Submitting Your Request...';loadEl.textContent="Your detailed du'a with Arabic transliteration is being prepared. This may take a few minutes...";}
+      else{btn.innerHTML='<span class="spinner">✦</span> Crafting Your Du\'a...';loadEl.textContent="Weaving Quranic verses, Hadith, and the Names of Allah into your personal supplication...";}
+      loadEl.style.display="block";
+      try{
+        const includeTransliteration=(deliveryMode==="email");
+        const res=await fetch(API.generate,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({userName,members:allMembers,deliveryMode,includeTransliteration,userEmail:userEmail||null})});
+        if(res.status===429){const d=await res.json();showError(d.detail||"Rate limit exceeded.");btn.disabled=false;btn.innerHTML="Generate My Du'a";loadEl.style.display="none";return;}
+        if(!res.ok){const d=await res.json().catch(()=>({}));throw new Error(d.detail||"Server error");}
+        const data=await res.json();
+
+        // Fix #4: If batch mode, server returns jobId — poll for completion
+        if(data.jobId && data.status==="processing"){
+          btn.innerHTML='<span class="spinner">✦</span> Generating...';
+          loadEl.textContent="Your du'a is being crafted in the background. Checking status...";
+          await pollJob(data.jobId, userName, userEmail);
+          return; // pollJob handles the rest
+        }
+
+        // Instant mode — du'a returned directly
+        generatedDuaText=data.dua;currentDuaId=null;currentEmailToken="";
+        renderDua(data.dua);document.getElementById("resultSection").style.display="block";
+        setTimeout(()=>document.getElementById("resultSection").scrollIntoView({behavior:"smooth"}),100);
+        loadCounter();
+      }catch(err){
+        if(err.message==="Failed to fetch"){
+          showError("Cannot connect to the server. Make sure the backend is running at "+window.location.origin+" and try again. (If you opened this HTML file directly, you need to access it through the server instead.)");
+        } else {
+          showError("Failed to generate du'a: "+err.message);
+        }
+      }
+      finally{btn.disabled=false;btn.innerHTML="Generate My Du'a";loadEl.style.display="none";}
+    }
+
+    // Fix #4: Non-blocking job polling for batch mode
+    async function pollJob(jobId, userName, userEmail) {
+      const btn=document.getElementById("generateBtn");
+      const loadEl=document.getElementById("loadingText");
+      const maxAttempts=120; // 5s * 120 = 10 min max
+      for(let i=0;i<maxAttempts;i++){
+        await new Promise(r=>setTimeout(r,5000)); // Poll every 5 seconds
+        try{
+          const res=await fetch(API.job+jobId);
+          if(!res.ok) continue;
+          const job=await res.json();
+          loadEl.textContent="Crafting your du'a... ("+Math.round((i+1)*5/60)+" min elapsed)";
+
+          if(job.status==="completed"&&job.dua){
+            generatedDuaText=job.dua;currentDuaId=null;currentEmailToken="";
+            renderDua(job.dua);
+            document.getElementById("resultSection").style.display="block";
+            setTimeout(()=>document.getElementById("resultSection").scrollIntoView({behavior:"smooth"}),100);
+            // Fix #1: Show accurate email status from server, not a blind assumption
+            if(userEmail){
+              const emailStatus=job.emailStatus||"none";
+              const s=document.getElementById("emailSuccess");
+              if(emailStatus==="sent"){s.textContent="Du'a sent to "+userEmail+"!";s.style.display="block";}
+              else if(emailStatus==="failed"){s.textContent="Du'a ready! Email delivery failed — use the Email button below to resend.";s.style.cssText="display:block;color:#c9a96e;";}
+              else if(emailStatus==="sending"){s.textContent="Du'a ready! Email is still being sent...";s.style.display="block";}
+              setTimeout(()=>s.style.display="none",8000);
+            }
+            loadCounter();
+            btn.disabled=false;btn.innerHTML="Generate My Du'a";loadEl.style.display="none";
+            return;
+          }
+          if(job.status==="failed"){
+            showError("Du'a generation failed: "+(job.error||"Unknown error")+". Please try again or use Instant mode.");
+            btn.disabled=false;btn.innerHTML="Generate My Du'a";loadEl.style.display="none";
+            return;
+          }
+        }catch(e){/* Network glitch — keep polling */}
+      }
+      showError("Du'a generation timed out. Please try again or use Instant mode.");
+      btn.disabled=false;btn.innerHTML="Generate My Du'a";loadEl.style.display="none";
+    }
+
+    function renderDua(text){const c=document.getElementById("duaContent");c.innerHTML="";text.split("\n").forEach(line=>{if(line.startsWith("## ")){const h=document.createElement("h2");h.innerHTML=renderInline(line.slice(3));c.appendChild(h);}else if(line.startsWith("# ")){const h=document.createElement("h1");h.innerHTML=renderInline(line.slice(2));c.appendChild(h);}else if(line.trim()==="---"){const d=document.createElement("div");d.className="divider";d.innerHTML='<div class="divider-line divider-line-l"></div><span class="divider-star">✦</span><div class="divider-line divider-line-r"></div>';c.appendChild(d);}else if(line.trim()===""){const s=document.createElement("div");s.style.height="12px";c.appendChild(s);}else{const p=document.createElement("p");p.innerHTML=renderInline(line);c.appendChild(p);}});}
+    function renderInline(t){
+      // Fix #2: Escape HTML entities first to prevent XSS, then apply markdown formatting
+      t=t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      t=t.replace(/\*\*\*(.+?)\*\*\*/g,'<strong style="color:var(--gold);font-style:italic">$1</strong>');
+      t=t.replace(/\*\*(.+?)\*\*/g,'<strong style="color:var(--gold)">$1</strong>');
+      t=t.replace(/\*(.+?)\*/g,'<em style="color:#b8a88a">$1</em>');
+      return t;
+    }
+
+    // PDF — dark theme matching website aesthetic
+    function exportPDF(){
+      const btn=document.getElementById("pdfBtn");btn.disabled=true;btn.textContent="Generating...";
+      const content=document.getElementById("duaContent");const userName=document.getElementById("userName").value.trim()||"Family";
+      const opt={margin:[.5,.6,.5,.6],filename:"dua-"+userName.toLowerCase().replace(/\s+/g,"-")+".pdf",image:{type:"jpeg",quality:.98},html2canvas:{scale:2,useCORS:true,backgroundColor:"#0a1628"},jsPDF:{unit:"in",format:"letter",orientation:"portrait"},pagebreak:{mode:["avoid-all","css","legacy"]}};
+      const clone=content.cloneNode(true);
+      clone.style.cssText="color:#d4c9b4;font-family:'Cormorant Garamond',Georgia,serif;font-size:14px;line-height:1.7;padding:20px;";
+      clone.querySelectorAll("h1,h2").forEach(h=>{h.style.color="#c9a96e";});
+      clone.querySelectorAll("p").forEach(p=>{p.style.color="#d4c9b4";});
+      clone.querySelectorAll("strong").forEach(s=>{s.style.color="#c9a96e";});
+      clone.querySelectorAll("em").forEach(e=>{e.style.color="#b8a88a";});
+      clone.querySelectorAll(".divider").forEach(d=>{d.style.cssText="text-align:center;margin:20px 0;color:#c9a96e;opacity:.4;";d.innerHTML="✦";});
+      const header=document.createElement("div");header.style.cssText="text-align:center;margin-bottom:36px;padding-bottom:24px;border-bottom:1px solid rgba(201,169,110,.2);";
+      header.innerHTML='<div style="font-family:Amiri,serif;font-size:26px;color:#c9a96e;margin-bottom:8px;direction:rtl;opacity:.8">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div><div style="font-size:30px;color:#e8dcc8;font-weight:300;letter-spacing:.04em">Du\'a for the Last Ten Nights</div><div style="font-size:14px;color:#8a7d6b;font-style:italic;margin-top:8px">A personalized supplication for '+esc(userName)+' and family</div>';
+      clone.prepend(header);
+      const footer=document.createElement("div");footer.style.cssText="text-align:center;margin-top:36px;padding-top:24px;border-top:1px solid rgba(201,169,110,.2);";
+      footer.innerHTML='<div style="font-family:Amiri,serif;font-size:18px;color:#c9a96e;margin-bottom:8px">تَقَبَّلَ اللَّهُ مِنَّا وَمِنكُمْ</div><p style="font-size:12px;color:#8a7d6b;font-style:italic">Please verify all Quranic verses and Hadith references with authentic Islamic sources.</p><p style="font-size:11px;color:#5a5042;margin-top:8px">Generated at mydua.ai — support@mydua.ai</p>';
+      clone.appendChild(footer);
+      const tempDiv=document.createElement("div");tempDiv.style.cssText="position:absolute;left:-9999px;background:#0a1628;width:7in;";tempDiv.appendChild(clone);document.body.appendChild(tempDiv);
+      html2pdf().set(opt).from(clone).save().then(()=>{document.body.removeChild(tempDiv);btn.disabled=false;btn.textContent="Download PDF";fetch(API.trackPdf,{method:"POST"}).catch(()=>{});}).catch(()=>{document.body.removeChild(tempDiv);btn.disabled=false;btn.textContent="Download PDF";alert("PDF generation failed. Try printing instead.");});
+    }
+
+    async function saveDua(){if(currentDuaId)return{id:currentDuaId,shareUrl:window.location.origin+"/shared/"+currentDuaId,emailToken:currentEmailToken};const userName=document.getElementById("userName").value.trim();const res=await fetch(API.save,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({userName,dua:generatedDuaText,members})});if(!res.ok)throw new Error("Failed to save");const data=await res.json();currentDuaId=data.id;currentEmailToken=data.emailToken||"";return data;}
+    async function shareDua(){const panel=document.getElementById("sharePanel");if(panel.style.display==="block"){panel.style.display="none";return;}document.getElementById("emailPanel").style.display="none";try{const data=await saveDua();document.getElementById("shareLinkInput").value=data.shareUrl||window.location.origin+"/shared/"+currentDuaId;panel.style.display="block";}catch(e){alert("Failed to create share link.");}}
+    function copyShareLink(){navigator.clipboard.writeText(document.getElementById("shareLinkInput").value).then(()=>{const e=document.getElementById("shareSuccess");e.textContent="Link copied!";e.style.display="block";setTimeout(()=>e.style.display="none",3000);});}
+    function togglePanel(id){["emailPanel","sharePanel"].forEach(p=>{if(p!==id)document.getElementById(p).style.display="none";});const panel=document.getElementById(id);panel.style.display=panel.style.display==="block"?"none":"block";}
+    async function sendEmail(){const email=document.getElementById("emailInput").value.trim();const btn=document.getElementById("emailSendBtn");const sEl=document.getElementById("emailSuccess");const eEl=document.getElementById("emailError");sEl.style.display="none";eEl.style.display="none";if(!email||!email.includes("@")){eEl.textContent="Please enter a valid email.";eEl.style.display="block";return;}btn.disabled=true;btn.textContent="Sending...";try{await saveDua();const res=await fetch(API.email,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({duaId:currentDuaId,email,recipientName:document.getElementById("userName").value.trim(),token:currentEmailToken})});if(!res.ok){const d=await res.json().catch(()=>({}));throw new Error(d.detail||"Failed");}sEl.textContent="Du'a sent to "+email+"!";sEl.style.display="block";document.getElementById("emailInput").value="";}catch(e){eEl.textContent=e.message;eEl.style.display="block";}finally{btn.disabled=false;btn.textContent="Send";}}
+    function copyDua(){navigator.clipboard.writeText(generatedDuaText).then(()=>{const b=document.getElementById("copyBtn");b.textContent="✓ Copied";b.classList.add("copied");setTimeout(()=>{b.textContent="Copy";b.classList.remove("copied");},2500);});}
+    function printDua(){const c=document.getElementById("duaContent").innerHTML;const u=document.getElementById("userName").value.trim()||"Family";const w=window.open("","_blank");w.document.write('<!DOCTYPE html><html><head><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400;1,700&family=Amiri:wght@400;700&display=swap" rel="stylesheet"/><style>body{font-family:"Cormorant Garamond",serif;max-width:700px;margin:40px auto;padding:20px;color:#e8dcc8;line-height:1.8;background:#0a1628;}h1{text-align:center;font-size:28px;color:#c9a96e;margin:30px 0 15px;}h2{font-size:22px;color:#c9a96e;margin:28px 0 12px;}p{font-size:16px;margin:4px 0;}strong{color:#c9a96e;}em{color:#b8a88a;}.divider{text-align:center;margin:20px 0;color:#c9a96e;opacity:.5;}.footer{text-align:center;font-size:12px;color:#8a7d6b;margin-top:30px;padding-top:20px;border-top:1px solid rgba(201,169,110,.2);}@media print{body{background:#0a1628;-webkit-print-color-adjust:exact;print-color-adjust:exact;}}</style></head><body><div style="text-align:center;margin-bottom:30px"><div style="font-family:Amiri,serif;font-size:24px;color:#c9a96e;direction:rtl">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div><div style="font-size:26px;margin:8px 0;color:#e8dcc8">Du\'a for the Last Ten Nights</div><div style="font-size:14px;color:#8a7d6b;font-style:italic">For '+esc(u)+' and family</div></div>'+c+'<div class="footer">Generated at mydua.ai — support@mydua.ai</div><script>window.print();<\/script></body></html>');w.document.close();}
+    function startOver(){document.getElementById("resultSection").style.display="none";["emailPanel","sharePanel"].forEach(p=>document.getElementById(p).style.display="none");generatedDuaText="";currentDuaId=null;currentEmailToken="";window.scrollTo({top:0,behavior:"smooth"});}
+    function showError(msg){const e=document.getElementById("errorMsg");e.textContent=msg;e.style.display="block";}
+    function hideError(){document.getElementById("errorMsg").style.display="none";}
+    // ── SUPPORT US (Stripe) ──
+    let selectedSupportAmount="10";
+    function selectAmount(amt){selectedSupportAmount=amt;document.querySelectorAll(".support-amt").forEach(b=>{if(b.dataset.amt===amt){b.style.borderColor="var(--gold)";b.style.background="rgba(201,169,110,0.12)";}else{b.style.borderColor="rgba(201,169,110,0.25)";b.style.background="rgba(255,255,255,0.03)";}});document.getElementById("customAmountWrap").style.display=amt==="custom"?"block":"none";}
+    async function handleSupport(){const btn=document.getElementById("supportBtn");btn.disabled=true;btn.textContent="Redirecting to Stripe...";const body={amount:selectedSupportAmount};if(selectedSupportAmount==="custom"){const val=parseInt(document.getElementById("customAmountInput").value);if(!val||val<1){alert("Please enter an amount of at least $1.");btn.disabled=false;btn.textContent="Support — Jazak\u2019Allah Khair";return;}body.customAmount=val;}try{const res=await fetch("/api/create-support-session",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});if(!res.ok){const d=await res.json().catch(()=>({}));throw new Error(d.detail||"Failed to create payment session");}const data=await res.json();window.location.href=data.url;}catch(e){alert("Payment error: "+e.message);btn.disabled=false;btn.textContent="Support — Jazak\u2019Allah Khair";}}
+
+    renderMembers();
+  </script>
+</body>
+</html>
