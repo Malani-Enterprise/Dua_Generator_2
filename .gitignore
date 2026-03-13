@@ -1,0 +1,18 @@
+# Environment variables (contains API keys — never commit)
+.env
+
+# Database (SQLite — created at runtime)
+data/mydua.db
+data/mydua.db-wal
+data/mydua.db-shm
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
